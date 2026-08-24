@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover" />
     <title>🎬 所有资源 · 领取教程</title>
-    <meta name="keywords" content="小说追番看剧,无广告" />
-    <meta name="description" content="纯净小说追番看剧神器，点击图标跳转App搜索关键词评论截图即可获取永久入口。" />
+    <meta name="keywords" content="动漫追番，小说漫画" />
+    <meta name="description" content="小说追番看剧神器，点击图标跳转App搜索关键词评论截图即可获取永久入口。" />
     <style>
         :root {
             --primary: #7c3aed;
@@ -147,36 +147,30 @@
 </div>
 <div id="copy-popup">✅ 文案已复制</div>
 <div id="jumpToast">🚀 正在跳转...</div>
-
 <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 <script>
     (function() {
         'use strict';
-
         // ========== 搜索关键词数据源（三个独立文件） ==========
         var xhsSearchKeywords = [];          // 小红书专用
         var douyinSearchKeywords = [];       // 抖音专用
         var ksbiliSearchKeywords = [];       // 快手 / 快手极速版 / 哔哩哔哩共用
-
         // ========== 评论文案数据源 ==========
         var douyinComments = [];
         var xhsComments = [];
         var bilibiliComments = [];
-
-        var defaultXhsKeywords = ['小红书热门', '宝藏分享', '好物推荐'];
-        var defaultDouyinKeywords = ['抖音热门', '追剧推荐', '热门短剧'];
-        var defaultKsbiliKeywords = ['热门视频', '影视剪辑', '番剧推荐'];
+        var defaultXhsKeywords = ['动漫软件', '漫画软件', '追番软件'];
+        var defaultDouyinKeywords = ['免费动漫app', '动漫app', '漫画app'];
+        var defaultKsbiliKeywords = ['动漫软件', '追番app', '漫画app推荐'];
         var defaultPoems = [
-            '古诗（xz6.锄禾日当午.cc.cd）删了',
-            '古诗（xz6.粒粒皆辛苦.cc.cd）删了'
+            '中文（xz6.锄禾日当午cc.cd）删了',
+            '中文（xz6.汗滴禾下土cc.cd）删了'
         ];
-
         var keywordPools = {
             xhs: { pool: [], index: 0 },
             douyin: { pool: [], index: 0 },
             ksbili: { pool: [], index: 0 }
         };
-
         function shuffleArray(arr) {
             var a = arr.slice();
             for (var i = a.length - 1; i > 0; i--) {
@@ -185,7 +179,6 @@
             }
             return a;
         }
-
         function loadPoolFromServer(fp, type) {
             return fetch('api.php?action=get&fp=' + encodeURIComponent(fp) + '&type=' + encodeURIComponent(type))
                 .then(function(r) { return r.json(); })
@@ -197,7 +190,6 @@
                 })
                 .catch(function() { return null; });
         }
-
         // 保留 savePoolToServer 函数定义（不再调用，但保留以防止其他引用报错）
         function savePoolToServer(fp, type, pool) {
             fetch('api.php?action=save&fp=' + encodeURIComponent(fp) + '&type=' + encodeURIComponent(type), {
@@ -206,7 +198,6 @@
                 body: JSON.stringify({ keywords: pool })
             }).catch(function() {});
         }
-
         function buildKeywordPool(type, existingPool) {
             if (existingPool) {
                 keywordPools[type].pool = existingPool;
@@ -231,7 +222,6 @@
             keywordPools[type].pool = shuffled.slice(0, 3);
             keywordPools[type].index = 0;
         }
-
         function getNextKeyword(type) {
             if (keywordPools[type].pool.length === 0) {
                 buildKeywordPool(type, null);
@@ -242,11 +232,9 @@
             keywordPools[type].index = (idx + 1) % pool.length;
             return kw;
         }
-
         function getRandomFromArray(arr) {
             return (arr && arr.length) ? arr[Math.floor(Math.random() * arr.length)] : '精彩内容，不容错过！';
         }
-
         var copyPopup = document.getElementById('copy-popup');
         var jumpToast = document.getElementById('jumpToast');
         var progressHint = document.getElementById('progressHint');
@@ -257,7 +245,6 @@
         var isJumping = false;
         var selectedFiles = [];
         var resourcesReady = false;
-
         var platformConfig = {
             'xhs': {
                 name: '小红书',
@@ -302,7 +289,6 @@
                 keywordType: 'ksbili'
             }
         };
-
         function copyText(text) {
             return new Promise(function(resolve) {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -321,13 +307,11 @@
             document.body.removeChild(ta);
             cb();
         }
-
         function showToast(el, text, duration) {
             el.textContent = text;
             el.classList.add('show');
             setTimeout(function() { el.classList.remove('show'); }, duration || 2000);
         }
-
         function updateProgress() {
             var remain = 3 - jumpCount;
             if (remain <= 0) {
@@ -340,7 +324,6 @@
                 progressHint.style.color = 'var(--primary)';
             }
         }
-
         function updateUploadStatus() {
             var count = selectedFiles.length;
             uploadStatus.className = 'upload-status';
@@ -365,7 +348,6 @@
                 submitBtn.textContent = '✨ 提 交（已就绪）';
             }
         }
-
         function loadResources() {
             var promises = [];
             // 三个独立的搜索词文件
@@ -405,17 +387,14 @@
             );
             return Promise.all(promises).then(function() { resourcesReady = true; });
         }
-
         function doJump(platformKey) {
             if (isJumping || !resourcesReady) return;
             var config = platformConfig[platformKey];
             if (!config) return;
-
             var comment = config.commentSource();
             var keywordType = config.keywordType;
             var keyword = getNextKeyword(keywordType);
             var schemeUrl = config.scheme + encodeURIComponent(keyword);
-
             isJumping = true;
             copyText(comment).then(function() {
                 showToast(copyPopup, '✅ 文案已复制', 1500);
@@ -445,7 +424,6 @@
                 isJumping = false;
             });
         }
-
         fileInput.addEventListener('change', function(e) {
             var newFiles = Array.from(this.files);
             if (!newFiles.length) return;
@@ -456,20 +434,17 @@
             updateUploadStatus();
             this.value = '';
         });
-
         submitBtn.addEventListener('click', function() {
             if (submitBtn.disabled) return;
             if (selectedFiles.length < 3) { alert('请至少上传3张评论截图'); return; }
-            window.location.href ="link3.cc/xz233";
+            window.location.href = 'https://link3.cc/xz233';
         });
-
         document.getElementById('btnXhs').addEventListener('click', function() { doJump('xhs'); });
         document.getElementById('btnDouyin').addEventListener('click', function() { doJump('douyin'); });
         document.getElementById('btnDouyinLite').addEventListener('click', function() { doJump('douyinlite'); });
         document.getElementById('btnKuaishou').addEventListener('click', function() { doJump('kuaishou'); });
         document.getElementById('btnKuaishouLite').addEventListener('click', function() { doJump('kuaishoulite'); });
         document.getElementById('btnBilibili').addEventListener('click', function() { doJump('bilibili'); });
-
         // ========== 核心修改：新用户不保存关键词，老用户维持不变 ==========
         function initApp() {
             loadResources().then(function() {
@@ -519,7 +494,6 @@
                 }
             }, 10000);
         }
-
         initApp();
     })();
 </script>
