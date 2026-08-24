@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>软件获取教程</title>
+    <title>多平台跳转工具</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:#f5f7fa;padding:30px 15px;font-family:system-ui;}
@@ -216,7 +216,7 @@
     <div class="example-wrap">
         <div class="example-title">📸 评论截图示例</div>
         <div class="example-img">
-            <img src="images/screenshot.png" alt="评论截图示例">
+            <img src="message_53404869417355778_user_upload_img_1" alt="评论截图示例">
         </div>
     </div>
 
@@ -245,28 +245,38 @@
 // ======================【代码内配置，改复制文字、搜索词在这里】======================
 // 点击图标复制到剪贴板的文字
 const copyText = {
-    xhs: "xz6.锄禾日当午cc.cd",
-    douyin: "xz6.锄禾日当午cc.cd",
-    ks: "xz6.锄禾日当午cc.cd",
-    douyinSpeed: "xz6.锄禾日当午cc.cd",
-    ksSpeed: "xz6.锄禾日当午cc.cd",
-    bilibili: "xz6.锄禾日当午cc.cd"
+    xhs: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
+    douyin: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
+    ks: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
+    douyinSpeed: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
+    ksSpeed: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
+    bilibili: "古诗（xz6.粒粒皆辛苦.cc.cd）删了"
 };
 
 // 打开APP搜索关键词
 let searchWord = {
-    xhs: "动漫追番app",
-    douyin: "动漫追番app",
-    ks: "动漫追番app",
-    douyinSpeed: "动漫追番app",
-    ksSpeed: "动漫追番app",
-    bilibili: "动漫追番app"
+    xhs: "动漫软件",
+    douyin: "动漫软件",
+    ks: "动漫软件",
+    douyinSpeed: "动漫软件",
+    ksSpeed: "动漫软件",
+    bilibili: "动漫软件"
 };
 
-// 提交后跳转目标地址（当前页面跳转，不新开标签）
+// 提交后跳转目标地址
 const nextPageUrl = "https://xz7.cc.cd/";
-// =================================================================
 
+// 网页降级链接（没装APP打开网页版搜索）
+const webUrl = {
+    xhs:"https://www.xiaohongshu.com/search_result?keyword=",
+    douyin:"https://www.douyin.com/search/",
+    ks:"https://www.kuaishou.com/search/video?searchKey=",
+    douyinSpeed:"https://www.douyin.com/search/",
+    ksSpeed:"https://www.kuaishou.com/search/video?searchKey=",
+    bilibili:"https://search.bilibili.com/all?keyword="
+};
+
+// APP唤起Scheme链接
 const appScheme = {
     xhs: "xhsdiscover://search?keyword=",
     douyin: "snssdk1128://search?keyword=",
@@ -275,26 +285,44 @@ const appScheme = {
     ksSpeed: "kwai://search?q=",
     bilibili: "bilibili://search?keyword="
 };
+// =================================================================
 
 document.querySelectorAll('.item').forEach(el=>{
     el.onclick = async function(){
         const appKey = this.dataset.app;
         const text = copyText[appKey];
         const kw = encodeURIComponent(searchWord[appKey]);
-        const schemeUrl = appScheme[appKey];
+        const schemeUrl = appScheme[appKey] + kw;
+        const fallbackWeb = webUrl[appKey] + kw;
 
+        //复制文本
         try{
             await navigator.clipboard.writeText(text);
-            alert("I copied the clipboard and will open the APP search soon");
+            alert("✅文案已复制，即将打开APP搜索");
         }catch(e){
+            //降级复制
             const ta = document.createElement('textarea');
-            ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');
+            ta.value=text;
+            ta.style.position="fixed";
+            ta.style.opacity="0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
             document.body.removeChild(ta);
-            alert("I copied the clipboard and will open the APP search soon");
+            alert("✅文案已复制，即将打开APP搜索");
         }
-        setTimeout(()=>{
-            window.location.href = schemeUrl;
-        },350);
+
+        //尝试唤起APP，超时跳网页版
+        let opened = false;
+        const timer = setTimeout(()=>{
+            if(!opened){
+                window.open(fallbackWeb,"_blank");
+            }
+        },1200);
+
+        window.location.href = schemeUrl;
+        opened = true;
+        clearTimeout(timer);
     }
 })
 
