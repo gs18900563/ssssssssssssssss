@@ -9,7 +9,6 @@
         body{background:#f5f7fa;padding:30px 15px;font-family:system-ui;}
         .container{max-width:500px;margin:0 auto;}
 
-        /*顶部标题介绍区域*/
         .header-card{
             background:#fff;
             border-radius:12px;
@@ -34,7 +33,6 @@
             text-align:left;
         }
 
-        /*顶部操作提示条*/
         .top-tip{
             background:#f7f3ff;
             border:1px solid #e9d8ff;
@@ -58,7 +56,6 @@
         .ksSpeed{background:#ff5800;}
         .bilibili{background:#fb7299;}
 
-        /*操作说明模块*/
         .notice-box{
             background:#fff;
             border-radius:12px;
@@ -69,7 +66,6 @@
             color:#333;
         }
 
-        /*截图示例区域*/
         .example-wrap{
             margin-bottom:24px;
         }
@@ -91,7 +87,6 @@
             display:block;
         }
 
-        /*上传提示区块*/
         .upload-tip{
             background:#ffffff;
             border-radius:12px;
@@ -102,7 +97,6 @@
             color:#333;
         }
 
-        /*上传组件样式，参考截图UI*/
         .upload-area{
             border:3px dashed #b88bff;
             background:#f8f2ff;
@@ -163,7 +157,6 @@
 <body>
 <div class="container">
 
-    <!--顶部标题介绍卡片-->
     <div class="header-card">
         <h1>小说追番看剧 · 纯净版</h1>
         <div class="header-sub">已有 9999+ 人参与，每日更新资源</div>
@@ -173,7 +166,6 @@
         </div>
     </div>
 
-    <!--图标上方提示条-->
     <div class="top-tip">
         点击下方图标跳转到APP，评论文案自动复制到剪贴板，跳转后粘贴评论
     </div>
@@ -205,14 +197,12 @@
         </div>
     </div>
 
-    <!--操作提示文案-->
     <div class="notice-box">
 跳转到APP后，在评论区粘贴文案评论，点个赞并截图<br>
 回来在最下方提交三张截图 AI审批后就可以获取资源~<br>
 跳转3次评论3个视频就行
     </div>
 
-    <!--评论截图示例-->
     <div class="example-wrap">
         <div class="example-title">📸 评论截图示例</div>
         <div class="example-img">
@@ -220,12 +210,10 @@
         </div>
     </div>
 
-    <!--上传提交说明-->
     <div class="upload-tip">
 📤 上传3张截图，提交后自动跳转资源入口
     </div>
 
-    <!--上传控件区域-->
     <div class="upload-area" id="uploadWrap">
         <div class="upload-icon">⬆</div>
         <div>
@@ -242,41 +230,28 @@
 </div>
 
 <script>
-// ======================【代码内配置，改复制文字、搜索词在这里】======================
-// 点击图标复制到剪贴板的文字
+// =================【在这里修改配置】====================
 const copyText = {
-    xhs: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
-    douyin: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
-    ks: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
-    douyinSpeed: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
-    ksSpeed: "古诗（xz6.粒粒皆辛苦.cc.cd）删了",
-    bilibili: "古诗（xz6.粒粒皆辛苦.cc.cd）删了"
+    xhs: "小红书评论内容",
+    douyin: "抖音评论内容",
+    ks: "快手评论内容",
+    douyinSpeed: "抖音极速版评论内容",
+    ksSpeed: "快手极速版评论内容",
+    bilibili: "B站评论内容"
 };
 
-// 打开APP搜索关键词
-let searchWord = {
-    xhs: "动漫软件",
-    douyin: "动漫软件",
-    ks: "动漫软件",
-    douyinSpeed: "动漫软件",
-    ksSpeed: "动漫软件",
-    bilibili: "动漫软件"
+const searchWord = {
+    xhs: "要搜的关键词",
+    douyin: "要搜的关键词",
+    ks: "要搜的关键词",
+    douyinSpeed: "要搜的关键词",
+    ksSpeed: "要搜的关键词",
+    bilibili: "要搜的关键词"
 };
 
-// 提交后跳转目标地址
 const nextPageUrl = "https://xz7.cc.cd/";
 
-// 网页降级链接（没装APP打开网页版搜索）
-const webUrl = {
-    xhs:"https://www.xiaohongshu.com/search_result?keyword=",
-    douyin:"https://www.douyin.com/search/",
-    ks:"https://www.kuaishou.com/search/video?searchKey=",
-    douyinSpeed:"https://www.douyin.com/search/",
-    ksSpeed:"https://www.kuaishou.com/search/video?searchKey=",
-    bilibili:"https://search.bilibili.com/all?keyword="
-};
-
-// APP唤起Scheme链接
+// APP唤起Scheme
 const appScheme = {
     xhs: "xhsdiscover://search?keyword=",
     douyin: "snssdk1128://search?keyword=",
@@ -285,48 +260,35 @@ const appScheme = {
     ksSpeed: "kwai://search?q=",
     bilibili: "bilibili://search?keyword="
 };
-// =================================================================
+// ======================================================
 
 document.querySelectorAll('.item').forEach(el=>{
     el.onclick = async function(){
         const appKey = this.dataset.app;
         const text = copyText[appKey];
         const kw = encodeURIComponent(searchWord[appKey]);
-        const schemeUrl = appScheme[appKey] + kw;
-        const fallbackWeb = webUrl[appKey] + kw;
+        const schemeLink = appScheme[appKey] + kw;
 
         //复制文本
         try{
             await navigator.clipboard.writeText(text);
-            alert("✅文案已复制，即将打开APP搜索");
         }catch(e){
-            //降级复制
             const ta = document.createElement('textarea');
-            ta.value=text;
-            ta.style.position="fixed";
-            ta.style.opacity="0";
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
             document.body.appendChild(ta);
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            alert("✅文案已复制，即将打开APP搜索");
         }
 
-        //尝试唤起APP，超时跳网页版
-        let opened = false;
-        const timer = setTimeout(()=>{
-            if(!opened){
-                window.open(fallbackWeb,"_blank");
-            }
-        },1200);
-
-        window.location.href = schemeUrl;
-        opened = true;
-        clearTimeout(timer);
+        //直接尝试唤起APP，无任何网页降级
+        window.location.href = schemeLink;
     }
 })
 
-// ==========图片上传逻辑==========
+//图片上传逻辑
 const uploadWrap = document.getElementById('uploadWrap');
 const fileInput = document.getElementById('fileInput');
 const countTip = document.getElementById('countTip');
